@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>غرفة الهروب: 60 ثانية 🔐</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0b0c10;
+            color: #fff;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            user-select: none;
+        }
+        h1 { color: #1f2833; background: #66fcf1; padding: 10px; border-radius: 10px; font-size: 22px; margin-bottom: 5px; }
+        
+        /* عداد الوقت المرعب */
+        #timer-box {
+            font-size: 35px;
+            font-weight: bold;
+            color: #ff4757;
+            text-shadow: 0 0 10px #ff4757;
+            margin: 10px 0;
+        }
+
+        /* الغرفة والباب */
+        #room {
+            width: 100%;
+            height: 280px;
+            background: linear-gradient(to bottom, #1f2833, #0b0c10);
+            border: 3px solid #66fcf1;
+            border-radius: 15px;
+            position: relative;
+            box-shadow: 0 0 20px rgba(102,252,241,0.2);
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* التلميح المكتوب على الحيطة */
+        .clue-text {
+            font-size: 16px;
+            background: rgba(0,0,0,0.6);
+            padding: 10px;
+            border-radius: 8px;
+            border-left: 4px solid #ff9f43;
+            max-width: 80%;
+            color: #ff9f43;
+            margin-bottom: 20px;
+        }
+
+        /* الباب المقفول */
+        #door {
+            font-size: 60px;
+            transition: 0.5s;
+        }
+
+        /* أزرار حل اللغز */
+        .pad-btn {
+            width: 80px;
+            height: 80px;
+            border: none;
+            border-radius: 50%;
+            margin: 10px;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 5px rgba(0,0,0,0.3);
+            transition: 0.1s;
+        }
+        .pad-btn:active { transform: translateY(4px); box-shadow: none; }
+        
+        #btn-red { background-color: #ff4757; }
+        #btn-blue { background-color: #2ed573; }
+        #btn-yellow { background-color: #ffa502; }
+
+        #status-msg { font-size: 18px; height: 25px; color: #66fcf1; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <h1>🔐 غرفة الهروب: لغز الـ 60 ثانية 🔐</h1>
+    <div id="timer-box">الوقت المتبقي: <span id="time-left">60</span> ثانية</div>
+
+    <div id="room">
+        <!-- التلميح اللي اللاعب لازم يفكر فيه عشان يحل -->
+        <div class="clue-text">🔒 تلميح محفور على الجدار: "النار تحرق العشب، والشمس تشرق فوقهما دائماً!"</div>
+        <div id="door">🚪🔒</div>
+    </div>
+
+    <div id="status-msg">اضغط على الألوان بالترتيب الصحيح لفتح الباب!</div>
+
+    <!-- أزرار اللغز -->
+    <div style="display: flex; justify-content: center;">
+        <button id="btn-red" class="pad-btn" onclick="pressColor('red')"></button>
+        <button id="btn-blue" class="pad-btn" onclick="pressColor('blue')"></button>
+        <button id="btn-yellow" class="pad-btn" onclick="pressColor('yellow')"></button>
+    </div>
+
+    <script>
+        // الترتيب الصحيح مبني على التلميح: النار (أحمر) ثم العشب (أخضر/أزرق هنا) ثم الشمس (أصفر)
+        const correctSequence = ['red', 'blue', 'yellow'];
+        let playerSequence = [];
+        let timeLeft = 60;
+        let gameActive = true;
+
+        // تشغيل عداد الوقت التنازلي
+        let countdown = setInterval(() => {
+            if (!gameActive) return;
+            timeLeft--;
+            document.getElementById("time-left").innerText = timeLeft;
+
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                gameActive = false;
+                alert("💥 بـوووم! انتهى الوقت ولم تستطع الهروب. حاول مجدداً!");
+                location.reload();
+            }
+        }, 1000);
+
+        function pressColor(color) {
+            if (!gameActive) return;
+
+            playerSequence.push(color);
+            document.getElementById("status-msg").innerText = "جاري إدخال النمط... ⏳";
+
+            // فحص الخطوات أول بأول
+            let currentIndex = playerSequence.length - 1;
+            if (playerSequence[currentIndex] !== correctSequence[currentIndex]) {
+                // اللاعب غلط في الترتيب
+                document.getElementById("status-msg").innerText = "❌ النمط خاطئ! القفل يعيد التشغيل!";
+                playerSequence = []; // تصفير محاولة اللاعب
+                return;
+            }
+
+            // لو اللاعب دخل النمط كله صح
+            if (playerSequence.length === correctSequence.length) {
+                gameActive = false;
+                document.getElementById("door").innerText = "🔓🚪✨";
+                document.getElementById("status-msg").innerText = "🎉 عبقري! فتح الباب وهربت بنجاح! 🎉";
+                setTimeout(() => {
+                    alert("🏆 مبروك! تخطيت الغرفة الأولى بنجاح! جاهز للغرفة اللي بعدها؟");
+                    location.reload();
+                }, 1000);
+            }
+        }
+    </script>
+
+</body>
+</html>
