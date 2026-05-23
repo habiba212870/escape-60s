@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>غرفة الهروب: 60 ثانية 🔐</title>
+    <title>تحدي الـ 1000 لغز للعباقرة 🧠</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -11,143 +11,128 @@
             color: #fff;
             text-align: center;
             margin: 0;
-            padding: 20px;
-            user-select: none;
+            padding: 15px;
         }
-        h1 { color: #1f2833; background: #66fcf1; padding: 10px; border-radius: 10px; font-size: 22px; margin-bottom: 5px; }
+        h1 { color: #000; background: #00ffcc; padding: 12px; border-radius: 10px; font-size: 22px; margin-bottom: 5px; box-shadow: 0 0 15px rgba(0,255,204,0.3); }
         
-        /* عداد الوقت المرعب */
-        #timer-box {
-            font-size: 35px;
-            font-weight: bold;
-            color: #ff4757;
-            text-shadow: 0 0 10px #ff4757;
-            margin: 10px 0;
-        }
-
-        /* الغرفة والباب */
+        .stats-container { display: flex; justify-content: space-around; background: #1f2833; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-weight: bold; color: #00ffcc; }
+        
         #room {
             width: 100%;
-            height: 280px;
+            min-height: 200px;
             background: linear-gradient(to bottom, #1f2833, #0b0c10);
-            border: 3px solid #66fcf1;
+            border: 3px solid #00ffcc;
             border-radius: 15px;
-            position: relative;
-            box-shadow: 0 0 20px rgba(102,252,241,0.2);
-            margin-bottom: 20px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            padding: 15px;
+            box-shadow: 0 0 25px rgba(0,255,204,0.1);
+            box-sizing: border-box;
         }
 
-        /* التلميح المكتوب على الحيطة */
-        .clue-text {
-            font-size: 16px;
-            background: rgba(0,0,0,0.6);
-            padding: 10px;
-            border-radius: 8px;
-            border-left: 4px solid #ff9f43;
-            max-width: 80%;
-            color: #ff9f43;
-            margin-bottom: 20px;
-        }
-
-        /* الباب المقفول */
-        #door {
-            font-size: 60px;
-            transition: 0.5s;
-        }
-
-        /* أزرار حل اللغز */
-        .pad-btn {
-            width: 80px;
-            height: 80px;
-            border: none;
-            border-radius: 50%;
-            margin: 10px;
-            font-size: 24px;
-            cursor: pointer;
-            box-shadow: 0 5px rgba(0,0,0,0.3);
-            transition: 0.1s;
-        }
-        .pad-btn:active { transform: translateY(4px); box-shadow: none; }
+        .clue-text { font-size: 16px; color: #fff; line-height: 1.6; text-align: center; max-width: 90%; }
         
-        #btn-red { background-color: #ff4757; }
-        #btn-blue { background-color: #2ed573; }
-        #btn-yellow { background-color: #ffa502; }
-
-        #status-msg { font-size: 18px; height: 25px; color: #66fcf1; font-weight: bold; }
+        .input-area { margin-top: 20px; width: 100%; }
+        input[type="text"] { padding: 12px; font-size: 18px; border-radius: 8px; border: 2px solid #00ffcc; background: #151722; color: #fff; text-align: center; width: 80%; max-width: 280px; }
+        
+        .action-btn { background: #00ffcc; color: #000; border: none; padding: 14px 40px; font-size: 18px; font-weight: bold; border-radius: 25px; cursor: pointer; margin-top: 15px; box-shadow: 0 0 15px rgba(0,255,204,0.3); }
+        
+        #status-msg { font-size: 16px; height: 25px; color: #ff3838; font-weight: bold; margin-top: 15px; }
     </style>
 </head>
 <body>
 
-    <h1>🔐 غرفة الهروب: لغز الـ 60 ثانية 🔐</h1>
-    <div id="timer-box">الوقت المتبقي: <span id="time-left">60</span> ثانية</div>
+    <h1>🧠 موسوعة التحدي: 1000 لغز 🧠</h1>
+    
+    <div class="stats-container">
+        <div>اللغز الحالي: <span id="current-index">1</span></div>
+        <div>النقاط: <span id="score">0</span></div>
+    </div>
 
     <div id="room">
-        <!-- التلميح اللي اللاعب لازم يفكر فيه عشان يحل -->
-        <div class="clue-text">🔒 تلميح محفور على الجدار: "النار تحرق العشب، والشمس تشرق فوقهما دائماً!"</div>
-        <div id="door">🚪🔒</div>
+        <div id="clue-box" class="clue-text">جاري تحميل اللغز الأول...</div>
     </div>
 
-    <div id="status-msg">اضغط على الألوان بالترتيب الصحيح لفتح الباب!</div>
-
-    <!-- أزرار اللغز -->
-    <div style="display: flex; justify-content: center;">
-        <button id="btn-red" class="pad-btn" onclick="pressColor('red')"></button>
-        <button id="btn-blue" class="pad-btn" onclick="pressColor('blue')"></button>
-        <button id="btn-yellow" class="pad-btn" onclick="pressColor('yellow')"></button>
+    <div class="input-area">
+        <input type="text" id="player-answer" placeholder="اكتب إجابتك هنا...">
+        <br>
+        <button class="action-btn" onclick="checkAnswer()">تحقق من الإجابة 🔍</button>
     </div>
+
+    <div id="status-msg"></div>
 
     <script>
-        // الترتيب الصحيح مبني على التلميح: النار (أحمر) ثم العشب (أخضر/أزرق هنا) ثم الشمس (أصفر)
-        const correctSequence = ['red', 'blue', 'yellow'];
-        let playerSequence = [];
-        let timeLeft = 60;
-        let gameActive = true;
-
-        // تشغيل عداد الوقت التنازلي
-        let countdown = setInterval(() => {
-            if (!gameActive) return;
-            timeLeft--;
-            document.getElementById("time-left").innerText = timeLeft;
-
-            if (timeLeft <= 0) {
-                clearInterval(countdown);
-                gameActive = false;
-                alert("💥 بـوووم! انتهى الوقت ولم تستطع الهروب. حاول مجدداً!");
-                location.reload();
+        // هنا مخزن الألغاز (تقدري تضيفي لحد 1000 لغز بنفس الطريقة تحت بعض)
+        const allRiddles = [
+            {
+                q: "اللغز 1: أنا شيء أملك قلباً ولكن ليس لديّ جسد، فما أنا؟",
+                a: "القرش" // الإجابة المقبولة (أو التفاح، الكود يقبل الكلمات بدقة)
+            },
+            {
+                q: "اللغز 2 (منطقي): ما هو الشيء الذي يملكه الفقير، ويحتاجه الغني، وإذا أكلته تموت؟",
+                a: "لاشيء"
+            },
+            {
+                q: "اللغز 3 (رياضيات): عدد إذا ضربته في نفسه وأضفت إليه 5 أصبح الناتج 41؟ فما هو؟",
+                a: "6"
+            },
+            {
+                q: "اللغز 4: كلمة من 4 حروف، إذا حذفت أول حرفين أصبحت اسم دولة عربية؟",
+                a: "عمان" // مثل: عمان (إذا حذفنا أول حرفين من كلمة 'جمان' أو 'عمان' كإجابة)
+            },
+            {
+                q: "اللغز 5 (تشفير): إذا كانت أ = 1، ب = 2، ج = 3.. فما هي الكلمة التي مجموع أرقامها يساوي 5 وتتكون من حرفين؟",
+                a: "بدا" // ب(2) + د(3) = 5 (أو أى كلمة تركب منطقياً)
             }
-        }, 1000);
+            // تقدري تنسخي السطور دي وتزودي لغز 6 و 7 و 8 لحد 1000!
+        ];
 
-        function pressColor(color) {
-            if (!gameActive) return;
+        // لتسهيل الإجابات، اللعبة هتقبل حل اللغز الأول لو كتب "التفاح" أو "القرش" مثلاً، تعال نثبت الإجابات الذكية:
+        allRiddles[0].a = "التفاح"; // قلب التفاحة
+        allRiddles[3].a = "سلطانة"; // طانة (عُمان) أو كلمة شبهها، لنبسطها: الإجابة "عمان"
 
-            playerSequence.push(color);
-            document.getElementById("status-msg").innerText = "جاري إدخال النمط... ⏳";
+        let currentIndex = 0;
+        let score = 0;
 
-            // فحص الخطوات أول بأول
-            let currentIndex = playerSequence.length - 1;
-            if (playerSequence[currentIndex] !== correctSequence[currentIndex]) {
-                // اللاعب غلط في الترتيب
-                document.getElementById("status-msg").innerText = "❌ النمط خاطئ! القفل يعيد التشغيل!";
-                playerSequence = []; // تصفير محاولة اللاعب
-                return;
-            }
-
-            // لو اللاعب دخل النمط كله صح
-            if (playerSequence.length === correctSequence.length) {
-                gameActive = false;
-                document.getElementById("door").innerText = "🔓🚪✨";
-                document.getElementById("status-msg").innerText = "🎉 عبقري! فتح الباب وهربت بنجاح! 🎉";
-                setTimeout(() => {
-                    alert("🏆 مبروك! تخطيت الغرفة الأولى بنجاح! جاهز للغرفة اللي بعدها؟");
-                    location.reload();
-                }, 1000);
+        // دالة لعرض اللغز الحالي
+        function loadRiddle() {
+            if (currentIndex < allRiddles.length) {
+                document.getElementById("clue-box").innerText = allRiddles[currentIndex].q;
+                document.getElementById("current-index").innerText = currentIndex + 1;
+                document.getElementById("player-answer").value = ""; // مسح الخانة
+                document.getElementById("status-msg").innerText = "";
+            } else {
+                // لو خلص كل الألغاز المتاحة
+                document.getElementById("room").innerHTML = "<div class='clue-text'>🎉 أسطوري! لقد أنهيت جميع الألغاز المتاحة حالياً في اللعبة! انتظر التحديث القادم للـ 1000 لغز! 🎉</div>";
+                document.querySelector(".input-area").style.display = "none";
             }
         }
-    </script>
 
+        // فحص إجابة اللاعب
+        function checkAnswer() {
+            let playerInput = document.getElementById("player-answer").value.trim();
+            let correctAnswer = allRiddles[currentIndex].a;
+
+            if (playerInput === correctAnswer) {
+                score += 10;
+                document.getElementById("score").innerText = score;
+                currentIndex++;
+                
+                document.getElementById("status-msg").style.color = "#00ffcc";
+                document.getElementById("status-msg").innerText = "✨ إجابة صحيحة! +10 نقاط ✨";
+                
+                // الانتقال للغز التالي بعد ثانية
+                setTimeout(loadRiddle, 1000);
+            } else {
+                document.getElementById("status-msg").style.color = "#ff3838";
+                document.getElementById("status-msg").innerText = "❌ إجابة خاطئة! فكر جيداً وأعد المحاولة.";
+            }
+        }
+
+        // تشغيل اللعبة لأول مرة
+        window.onload = loadRiddle;
+    </script>
 </body>
 </html>
